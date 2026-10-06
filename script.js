@@ -1,112 +1,83 @@
-let heldDice = [false, false, false, false, false];
-let rollCount = 0;
+<!DOCTYPE html>
+<html lang="en">
 
-// Your actual Azure Node.js REST API
-const API_BASE_URL = "https://dice-roller-tan-node-h2d7a7b7dthgdnbg.centralus-01.azurewebsites.net";
+<head>
 
-async function wakeServerAndStart() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/wake`);
+    <meta charset="UTF-8">
 
-        if (!response.ok) {
-            throw new Error(`Wake API returned HTTP ${response.status}`);
-        }
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-        await rollDice();
+    <title>Dice Roller</title>
 
-    } catch (error) {
-        console.error("Could not wake the Dice Roller server:", error);
-        console.error("Check that the Azure API is running and CORS is configured.");
-    }
-}
+    <link rel="stylesheet" href="style.css">
 
-async function getRemoteRoll() {
-    const response = await fetch(`${API_BASE_URL}/roll`);
+</head>
 
-    if (!response.ok) {
-        throw new Error(`Roll API returned HTTP ${response.status}`);
-    }
+<body>
 
-    const data = await response.json();
+    <main class="container">
 
-    if (!Number.isInteger(data.roll) || data.roll < 1 || data.roll > 6) {
-        throw new Error("The server returned an invalid die value.");
-    }
+        <h1>Dice Roller</h1>
 
-    return data.roll;
-}
+        <p>
+            Select a die and roll it using the remote
+            Dice Roller REST API.
+        </p>
 
-async function rollDice() {
 
-    rollCount++;
+        <section class="dice-buttons">
 
-    const rollPromises = [];
+            <button onclick="rollDie(4)">
+                D4
+            </button>
 
-    for (let i = 0; i < 5; i++) {
+            <button onclick="rollDie(6)">
+                D6
+            </button>
 
-        if (heldDice[i] === false) {
+            <button onclick="rollDie(8)">
+                D8
+            </button>
 
-            rollPromises.push(
-                getRemoteRoll().then(roll => {
-                    document.getElementById("die" + (i + 1)).value = roll;
-                })
-            );
-        }
-    }
+            <button onclick="rollDie(10)">
+                D10
+            </button>
 
-    try {
+            <button onclick="rollDie(12)">
+                D12
+            </button>
 
-        await Promise.all(rollPromises);
+            <button onclick="rollDie(20)">
+                D20
+            </button>
 
-        document.getElementById("rollCount").textContent =
-            "Rolls: " + rollCount;
+            <button onclick="rollDie(100)">
+                D100
+            </button>
 
-    } catch (error) {
+        </section>
 
-        rollCount--;
 
-        console.error("Could not roll the dice:", error);
-    }
-}
+        <section class="result">
 
-function toggleHold(dieNumber) {
+            <h2>Result</h2>
 
-    let index = dieNumber - 1;
+            <div id="rollResult">
+                -
+            </div>
 
-    heldDice[index] = !heldDice[index];
+            <p id="status">
+                Connecting to Dice Roller server...
+            </p>
 
-    let die = document.getElementById("dieContainer" + dieNumber);
-    let holdText = document.getElementById("hold" + dieNumber);
+        </section>
 
-    if (heldDice[index]) {
+    </main>
 
-        die.classList.add("held");
-        holdText.textContent = "HELD";
 
-    } else {
+    <script src="script.js"></script>
 
-        die.classList.remove("held");
-        holdText.textContent = "Click to Hold";
-    }
-}
+</body>
 
-async function newTurn() {
-
-    heldDice = [false, false, false, false, false];
-    rollCount = 0;
-
-    for (let i = 1; i <= 5; i++) {
-
-        document.getElementById("dieContainer" + i)
-            .classList.remove("held");
-
-        document.getElementById("hold" + i).textContent =
-            "Click to Hold";
-
-        document.getElementById("die" + i).value = "";
-    }
-
-    await rollDice();
-
-    document.getElementById("rollButton").focus();
-}
+</html>
