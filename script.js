@@ -1,11 +1,9 @@
 let heldDice = [false, false, false, false, false];
 let rollCount = 0;
 
+// Your actual Azure Node.js REST API
+const API_BASE_URL = "https://dice-roller-tan-node-h2d7a7b7dthgdnbg.centralus-01.azurewebsites.net";
 
-const API_BASE_URL = "dice-roller-tan-node-h2d7a7b7dthgdnbg.centralus-01.azurewebsites.net";
-
-// Requirement 2.2:
-// Wake the server asynchronously while the site loads.
 async function wakeServerAndStart() {
     try {
         const response = await fetch(`${API_BASE_URL}/wake`);
@@ -14,15 +12,13 @@ async function wakeServerAndStart() {
             throw new Error(`Wake API returned HTTP ${response.status}`);
         }
 
-        // Start the first roll after the server responds.
         await rollDice();
+
     } catch (error) {
         console.error("Could not wake the Dice Roller server:", error);
+        console.error("Check that the Azure API is running and CORS is configured.");
     }
 }
-
-// Requirement 2.3:
-// Get a random die value from the remote REST API.
 
 async function getRemoteRoll() {
     const response = await fetch(`${API_BASE_URL}/roll`);
@@ -59,11 +55,16 @@ async function rollDice() {
     }
 
     try {
+
         await Promise.all(rollPromises);
 
-        document.getElementById("rollCount").textContent = rollCount;
+        document.getElementById("rollCount").textContent =
+            "Rolls: " + rollCount;
+
     } catch (error) {
+
         rollCount--;
+
         console.error("Could not roll the dice:", error);
     }
 }
@@ -78,9 +79,12 @@ function toggleHold(dieNumber) {
     let holdText = document.getElementById("hold" + dieNumber);
 
     if (heldDice[index]) {
+
         die.classList.add("held");
         holdText.textContent = "HELD";
+
     } else {
+
         die.classList.remove("held");
         holdText.textContent = "Click to Hold";
     }
@@ -92,8 +96,13 @@ async function newTurn() {
     rollCount = 0;
 
     for (let i = 1; i <= 5; i++) {
-        document.getElementById("dieContainer" + i).classList.remove("held");
-        document.getElementById("hold" + i).textContent = "Click to Hold";
+
+        document.getElementById("dieContainer" + i)
+            .classList.remove("held");
+
+        document.getElementById("hold" + i).textContent =
+            "Click to Hold";
+
         document.getElementById("die" + i).value = "";
     }
 
