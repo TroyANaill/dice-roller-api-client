@@ -2,7 +2,7 @@ let heldDice = [false, false, false, false, false];
 let rollCount = 0;
 
 
-const API_BASE_URL = dice-roller-tan-node-h2d7a7b7dthgdnbg.centralus-01.azurewebsites.net;
+const API_BASE_URL = "dice-roller-tan-node-h2d7a7b7dthgdnbg.centralus-01.azurewebsites.net";
 
 // Requirement 2.2:
 // Wake the server asynchronously while the site loads.
