@@ -101,7 +101,7 @@
 				const x = document.getElementById("x-value").value
 				const y = document.getElementById("y-value").value
 
-				// Note the URL (fetch) string will look something like '/add-two-integers?x=2&y=1' when it is sent.
+				
 				const url = document.getElementById("urlInput").value
 				const fetchString = url+"/add-two-integers?x="+x+"&y="+y
 				const response = await fetch(fetchString)
@@ -148,5 +148,83 @@
 			}
 		</script>
 	</div>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yahtzee Dice Roller</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="wakeServerAndStart()">
+
+    <main class="container">
+
+        <h1>Yahtzee Dice Roller</h1>
+
+        <p class="instructions">
+            Roll five six-sided dice for Yahtzee. Click a die to hold it.
+            Held dice will not change when you roll again.
+            Click a held die again to release it.
+        </p>
+
+        <!-- Area for dice-->
+        <section class="dice-area">
+
+           <div class="die" id="dieContainer1">
+                <label for="die1">Die 1</label>
+                <input type="text" id="die1" readonly onclick="toggleHold(1)">
+                <span class="hold-text" id="hold1">Click to Hold</span>
+            </div>
+
+            <div class="die" id="dieContainer2">
+                <label for="die2">Die 2</label>
+                <input type="text" id="die2" readonly onclick="toggleHold(2)">
+                <span class="hold-text" id="hold2">Click to Hold</span>
+            </div>
+
+            <div class="die" id="dieContainer3">
+                <label for="die3">Die 3</label>
+                <input type="text" id="die3" readonly onclick="toggleHold(3)">
+                <span class="hold-text" id="hold3">Click to Hold</span>
+            </div>
+
+            <div class="die" id="dieContainer4">
+                <label for="die4">Die 4</label>
+                <input type="text" id="die4" readonly onclick="toggleHold(4)">
+                <span class="hold-text" id="hold4">Click to Hold</span>
+            </div>
+
+            <div class="die" id="dieContainer5">
+                <label for="die5">Die 5</label>
+                <input type="text" id="die5" readonly onclick="toggleHold(5)">
+                <span class="hold-text" id="hold5">Click to Hold</span>
+            </div>
+
+        </section>
+
+        <!-- Count rolls and buttons -->
+        <p class="roll-count">
+            Rolls: <span id="rollCount">0</span>
+        </p>
+
+        <div class="buttons">
+            <button id="rollButton" onclick="rollDice()" autofocus>
+                Roll Dice
+            </button>
+
+            <button onclick="newTurn()">
+                New Turn
+            </button>
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
